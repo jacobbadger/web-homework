@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { bool } from 'prop-types'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery, useMutation } from '@apollo/react-hooks'
 import { css } from '@emotion/core'
-import { getUsersQuery } from '../../gql/users.gql'
+import { getUsersQuery, deleteUser } from '../../gql/users.gql'
 import { translateText } from '../../utils/translation.util'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
@@ -17,48 +17,25 @@ import EditIcon from '@material-ui/icons/Edit'
 import SaveIcon from '@material-ui/icons/Save'
 import DeleteIcon from '@material-ui/icons/Delete'
 
-// const makeDataTestId = (transactionId, fieldName) => `transaction-${transactionId}-${fieldName}`
-
 export function UserTable ({ isI18nEnabled }) {
   const { loading, error, data: usersList } = useQuery(getUsersQuery)
-
-  // const [removeTransactionMutation] = useMutation(deleteTransaction, {
-  //   update (cache, { data }) {
-  //     const removedTransaction = data.deleteTransaction
-  //     const { transactions } = cache.readQuery({
-  //       query: getTransactions
-  //     })
-  //     const filteredTransactions = transactions.filter((item) => item.id !== removedTransaction.id)
-  //     cache.writeQuery({
-  //       query: getTransactions,
-  //       data: {
-  //         transactions: [
-  //           ...filteredTransactions
-  //         ]
-  //       }
-  //     })
-  //   }
-  // })
-  // const [updateTransactionMutation] = useMutation(updateTransaction, {
-  //   update (cache, { data }) {
-  //     const updatedTransaction = data.updateTransaction
-  //     const { transactions } = cache.readQuery({
-  //       query: getTransactions
-  //     })
-  //     const edittedTransactions = transactions.map((item) => {
-  //       return item.id === updatedTransaction.id ? updatedTransaction : item
-  //     })
-  //     cache.writeQuery({
-  //       query: getTransactions,
-  //       data: {
-  //         transactions: [
-  //           ...edittedTransactions
-  //         ]
-  //       }
-  //     })
-  //     setIsEditting(false)
-  //   }
-  // })
+  const [deleteUserMutation] = useMutation(deleteUser, {
+    update (cache, { data }) {
+      const removedUser = data.deleteUser
+      const { users } = cache.readQuery({
+        query: getUsersQuery
+      })
+      const filteredUsers = users.filter((item) => item.id !== removedUser.id)
+      cache.writeQuery({
+        query: getUsersQuery,
+        data: {
+          users: [
+            ...filteredUsers
+          ]
+        }
+      })
+    }
+  })
 
   const [isEditting, setIsEditting] = useState(false)
   const [editDescription, setEditDescription] = useState('')
@@ -131,7 +108,7 @@ export function UserTable ({ isI18nEnabled }) {
                       <DeleteIcon
                         css={deleteStyle}
                         onClick={() => {
-                          // removeTransactionMutation({ variables: { id } })
+                          deleteUserMutation({ variables: { id } })
                         }}
                       >
                         Delete

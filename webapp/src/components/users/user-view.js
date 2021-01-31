@@ -13,7 +13,9 @@ export function UserView () {
         { pageTitle }
         {/* {translateText(pageTitle, isI18nEnabled)} */}
       </h1>
-      <UserTable isI18nEnabled={false} />
+      <div css={paddingStyle} >
+        <UserTable isI18nEnabled={false} />
+      </div>
     </Fragment>
   )
 }
