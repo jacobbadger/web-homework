@@ -13,7 +13,7 @@ function AppRouter () {
         <nav css={navStyle}>
           <AppBar css={navStyle} position='static'>
             <Toolbar>
-              <Link to='/'>
+              <Link to='/?i18n=false'>
                 <img alt='' css={logoStyle} src='https://getdivvy.com/wp-content/uploads/2019/05/Divvy-Logo-19-White.png' />
               </Link>
               <Typography variant='h6' >
