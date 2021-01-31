@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { bool } from 'prop-types'
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import { css } from '@emotion/core'
-import { getUsersQuery, deleteUser } from '../../gql/users.gql'
+import { getUsersQuery, deleteUser, updateUser } from '../../gql/users.gql'
 import { translateText } from '../../utils/translation.util'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
@@ -37,8 +37,30 @@ export function UserTable ({ isI18nEnabled }) {
     }
   })
 
+  const [updateUserMutation] = useMutation(updateUser, {
+    update (cache, { data }) {
+      const updatedUser = data.updateUser
+      const { users } = cache.readQuery({
+        query: getUsersQuery
+      })
+      const edittedUsers = users.map((item) => {
+        return item.id === updatedUser.id ? updatedUser : item
+      })
+      cache.writeQuery({
+        query: getUsersQuery,
+        data: {
+          users: [
+            ...edittedUsers
+          ]
+        }
+      })
+      setIsEditting(false)
+    }
+  })
+
   const [isEditting, setIsEditting] = useState(false)
-  const [editDescription, setEditDescription] = useState('')
+  const [editFirstName, setEditFirstName] = useState('')
+  const [editLastName, setEditLastName] = useState('')
 
   if (loading) {
     return (
@@ -75,12 +97,16 @@ export function UserTable ({ isI18nEnabled }) {
                 const { id, firstName, lastName, dob } = row
                 return (
                   <TableRow css={rowStyle} key={row.id}>
-                    <TableCell component='th' scope='row'>
-                      {firstName}
+                    <TableCell css={descriptionStyle}>
+                      {isEditting === id ? (
+                        <TextField onChange={(event) => { setEditFirstName(event.target.value) }} value={editFirstName} />
+                      ) : (
+                        <div>{translateText(firstName, isI18nEnabled)}</div>
+                      )}
                     </TableCell>
                     <TableCell css={descriptionStyle} >
                       {isEditting === id ? (
-                        <TextField onChange={(event) => { setEditDescription(event.target.value) }} value={editDescription} />
+                        <TextField onChange={(event) => { setEditLastName(event.target.value) }} value={editLastName} />
                       ) : (
                         <div>{translateText(lastName, isI18nEnabled)}</div>
                       )}
@@ -92,13 +118,26 @@ export function UserTable ({ isI18nEnabled }) {
                           css={buttonStyle}
                           onClick={() => {
                             setIsEditting(id)
+                            setEditFirstName(firstName)
+                            setEditLastName(lastName)
                           }}
                         >
                           Edit
                         </EditIcon>
                       ) : (
                         <SaveIcon
-                          onClick={() => {}}
+                          onClick={() => {
+                            const edittedUser = {
+                              firstName: editFirstName,
+                              lastName: editLastName,
+                              id,
+                              dob
+                            }
+                            updateUserMutation({ variables: edittedUser })
+                            setIsEditting(false)
+                            setEditFirstName('')
+                            setEditLastName('')
+                          }}
                         >
                           Save
                         </SaveIcon>
