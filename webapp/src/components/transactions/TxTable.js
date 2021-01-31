@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { bool } from 'prop-types'
 import { deleteTransaction, getTransactions, updateTransaction } from '../../gql/transactions.gql'
+import { getUsersQuery } from '../../gql/users.gql'
+import { getMerchants } from '../../gql/merchants.gql'
 import { useMutation, useQuery } from '@apollo/react-hooks'
 import { css } from '@emotion/core'
 import { convertToRomanNumeral } from '../../utils/romanNumerals.util'
@@ -59,6 +61,25 @@ export function TxTable ({ isI18nEnabled }) {
   })
 
   const { loading, error, data = {} } = useQuery(getTransactions)
+  const { data: usersList } = useQuery(getUsersQuery)
+  const { data: merchantsList } = useQuery(getMerchants)
+
+  let usersMap = []
+  if (usersList && usersList.users) {
+    usersMap = usersList.users.reduce((map, obj) => {
+      map[obj.id] = `${obj.firstName} ${obj.lastName}`
+      return map
+    }, {})
+  }
+
+  let merchantsMap = []
+  if (merchantsList && merchantsList.merchants) {
+    merchantsMap = merchantsList.merchants.reduce((map, obj) => {
+      map[obj.id] = obj.name
+      return map
+    }, {})
+  }
+
   const [isEditting, setIsEditting] = useState(false)
   const [editDescription, setEditDescription] = useState('')
   const [editAmount, setEditAmount] = useState('')
@@ -88,9 +109,9 @@ export function TxTable ({ isI18nEnabled }) {
         <Table aria-label='a dense table' size='small' >
           <TableHead>
             <TableRow>
-              <TableCell>{translateText('User ID', isI18nEnabled)}</TableCell>
+              <TableCell>{translateText('User Name', isI18nEnabled)}</TableCell>
               <TableCell>{translateText('Description', isI18nEnabled)}</TableCell>
-              <TableCell>{translateText('Merchant ID', isI18nEnabled)}</TableCell>
+              <TableCell>{translateText('Merchant', isI18nEnabled)}</TableCell>
               <TableCell>{translateText('Debit/Credit', isI18nEnabled)}</TableCell>
               <TableCell>{translateText('Amount', isI18nEnabled)}</TableCell>
               <TableCell>{translateText('Edit', isI18nEnabled)}</TableCell>
@@ -104,7 +125,7 @@ export function TxTable ({ isI18nEnabled }) {
                 return (
                   <TableRow css={rowStyle} key={row.id}>
                     <TableCell component='th' scope='row'>
-                      {userId}
+                      {translateText(usersMap[userId], isI18nEnabled)}
                     </TableCell>
                     <TableCell css={descriptionStyle} >
                       {isEditting === id ? (
@@ -113,7 +134,7 @@ export function TxTable ({ isI18nEnabled }) {
                         <div>{translateText(description, isI18nEnabled) }</div>
                       )}
                     </TableCell>
-                    <TableCell>{merchantId}</TableCell>
+                    <TableCell>{translateText(merchantsMap[merchantId], isI18nEnabled)}</TableCell>
                     <TableCell>{credit === true ? translateText('Credit', isI18nEnabled) : translateText('Debit', isI18nEnabled)}</TableCell>
                     <TableCell css={amountStyle}>
                       {isEditting === id ? (

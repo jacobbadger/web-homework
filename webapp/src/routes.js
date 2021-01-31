@@ -18,7 +18,7 @@ function AppRouter () {
                 <img alt='' css={logoStyle} src='https://getdivvy.com/wp-content/uploads/2019/05/Divvy-Logo-19-White.png' />
               </Link>
               <Typography variant='h6' >
-                <Link css={linkStyle} to='/users'>Users</Link>
+                <Link css={linkStyle} to='/users?i18n=false'>Users</Link>
               </Typography>
             </Toolbar>
           </AppBar>
