@@ -25,7 +25,7 @@ export function Home () {
       </Link>
       <div css={mainStyle}>
         <div css={paddingStyle}>
-          <CreateTransaction isI18nEnabled={isI18nEnabled}/>
+          <CreateTransaction isI18nEnabled={isI18nEnabled} />
         </div>
         <div css={paddingStyle}>
           <TxTable css={paddingStyle} isI18nEnabled={isI18nEnabled} />

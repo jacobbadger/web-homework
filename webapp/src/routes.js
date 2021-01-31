@@ -2,6 +2,7 @@ import React from 'react'
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 import { css } from '@emotion/core'
 import { Home } from './home'
+import { UserView } from './components/users/user-view'
 import AppBar from '@material-ui/core/AppBar'
 import Typography from '@material-ui/core/Typography'
 import Toolbar from '@material-ui/core/Toolbar'
@@ -17,14 +18,14 @@ function AppRouter () {
                 <img alt='' css={logoStyle} src='https://getdivvy.com/wp-content/uploads/2019/05/Divvy-Logo-19-White.png' />
               </Link>
               <Typography variant='h6' >
-                <Link css={linkStyle} to='/another'>Users</Link>
+                <Link css={linkStyle} to='/users'>Users</Link>
               </Typography>
             </Toolbar>
           </AppBar>
         </nav>
         <div className='main-content' css={contentStyle}>
           <Route component={Home} exact path='/' />
-          <Route component={() => (<div>Content for /another route</div>)} exact path='/another' />
+          <Route component={UserView} exact path='/users' />
         </div>
       </div>
     </Router>

@@ -6,6 +6,7 @@ export const getUsersQuery = gql`
       id
       firstName
       lastName
+      dob
     }
   }
 `

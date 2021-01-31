@@ -113,7 +113,7 @@ export function TxTable ({ isI18nEnabled }) {
                       {isEditting === id ? (
                         <TextField onChange={(event) => { setEditDescription(event.target.value) }} value={editDescription} />
                       ) : (
-                          <div>{translateText(description, isI18nEnabled) }</div>
+                        <div>{translateText(description, isI18nEnabled) }</div>
                       )}
                     </TableCell>
                     <TableCell>{merchantId}</TableCell>
