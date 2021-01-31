@@ -36,3 +36,11 @@ export const updateUser = gql`
     }
   }
 `
+
+export const createUser = gql`
+  mutation createUser($dob:String!, $firstName:String!, $lastName:String!) {
+    createUser(dob: $dob, firstName: $firstName, lastName: $lastName) {
+      id
+    }
+  }
+`

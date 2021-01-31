@@ -19,10 +19,7 @@ import SaveIcon from '@material-ui/icons/Save'
 import DeleteIcon from '@material-ui/icons/Delete'
 import Switch from '@material-ui/core/Switch'
 
-// const makeDataTestId = (transactionId, fieldName) => `transaction-${transactionId}-${fieldName}`
-
 export function TxTable ({ isI18nEnabled }) {
-  console.log('did i pass the pro[', isI18nEnabled)
   const [removeTransactionMutation] = useMutation(deleteTransaction, {
     update (cache, { data }) {
       const removedTransaction = data.deleteTransaction

@@ -61,6 +61,7 @@ export function UserTable ({ isI18nEnabled }) {
   const [isEditting, setIsEditting] = useState(false)
   const [editFirstName, setEditFirstName] = useState('')
   const [editLastName, setEditLastName] = useState('')
+  const [editDob, setEditDob] = useState('')
 
   if (loading) {
     return (
@@ -97,21 +98,27 @@ export function UserTable ({ isI18nEnabled }) {
                 const { id, firstName, lastName, dob } = row
                 return (
                   <TableRow css={rowStyle} key={row.id}>
-                    <TableCell css={descriptionStyle}>
+                    <TableCell css={cellStyle}>
                       {isEditting === id ? (
                         <TextField onChange={(event) => { setEditFirstName(event.target.value) }} value={editFirstName} />
                       ) : (
                         <div>{translateText(firstName, isI18nEnabled)}</div>
                       )}
                     </TableCell>
-                    <TableCell css={descriptionStyle} >
+                    <TableCell css={cellStyle} >
                       {isEditting === id ? (
                         <TextField onChange={(event) => { setEditLastName(event.target.value) }} value={editLastName} />
                       ) : (
                         <div>{translateText(lastName, isI18nEnabled)}</div>
                       )}
                     </TableCell>
-                    <TableCell>{dob}</TableCell>
+                    <TableCell css={cellStyle}>
+                      {isEditting === id ? (
+                        <TextField onChange={(event) => { setEditDob(event.target.value) }} value={editDob} />
+                      ) : (
+                        <div>{translateText(dob, isI18nEnabled)}</div>
+                      )}
+                    </TableCell>
                     <TableCell css={editIconStyle}>
                       {isEditting !== id ? (
                         <EditIcon
@@ -120,6 +127,7 @@ export function UserTable ({ isI18nEnabled }) {
                             setIsEditting(id)
                             setEditFirstName(firstName)
                             setEditLastName(lastName)
+                            setEditDob(dob)
                           }}
                         >
                           Edit
@@ -131,12 +139,13 @@ export function UserTable ({ isI18nEnabled }) {
                               firstName: editFirstName,
                               lastName: editLastName,
                               id,
-                              dob
+                              dob: editDob
                             }
                             updateUserMutation({ variables: edittedUser })
                             setIsEditting(false)
                             setEditFirstName('')
                             setEditLastName('')
+                            setEditDob('')
                           }}
                         >
                           Save
@@ -176,7 +185,7 @@ const deleteStyle = css`
   color: red;
 `
 
-const descriptionStyle = css`
+const cellStyle = css`
   width: 166px;
 `
 
