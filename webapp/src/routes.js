@@ -20,14 +20,6 @@ function AppRouter () {
                 <Link to='/another'>Another route</Link>
               </Typography>
             </Toolbar>
-            {/* <ul >
-              <li>
-                <Link to='/'>Home</Link>
-              </li>
-              <li>
-                <Link to='/another'>Another route</Link>
-              </li>
-            </ul> */}
           </AppBar>
         </nav>
         <div className='main-content' css={contentStyle}>
