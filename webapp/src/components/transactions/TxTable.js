@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
+import { bool } from 'prop-types'
 import { deleteTransaction, getTransactions, updateTransaction } from '../../gql/transactions.gql'
 import { useMutation, useQuery } from '@apollo/react-hooks'
 import { css } from '@emotion/core'
 import { convertToRomanNumeral } from '../../utils/romanNumerals.util'
+import { translateText } from '../../utils/translation.util'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
@@ -19,7 +21,8 @@ import Switch from '@material-ui/core/Switch'
 
 // const makeDataTestId = (transactionId, fieldName) => `transaction-${transactionId}-${fieldName}`
 
-export function TxTable () {
+export function TxTable ({ isI18nEnabled }) {
+  console.log('did i pass the pro[', isI18nEnabled)
   const [removeTransactionMutation] = useMutation(deleteTransaction, {
     update (cache, { data }) {
       const removedTransaction = data.deleteTransaction
@@ -88,13 +91,13 @@ export function TxTable () {
         <Table aria-label='a dense table' size='small' >
           <TableHead>
             <TableRow>
-              <TableCell>User ID</TableCell>
-              <TableCell>Description</TableCell>
-              <TableCell>Merchant ID</TableCell>
-              <TableCell>Debit/Credit</TableCell>
-              <TableCell>Amount</TableCell>
-              <TableCell>Edit</TableCell>
-              <TableCell>Remove</TableCell>
+              <TableCell>{translateText('User ID', isI18nEnabled)}</TableCell>
+              <TableCell>{translateText('Description', isI18nEnabled)}</TableCell>
+              <TableCell>{translateText('Merchant ID', isI18nEnabled)}</TableCell>
+              <TableCell>{translateText('Debit/Credit', isI18nEnabled)}</TableCell>
+              <TableCell>{translateText('Amount', isI18nEnabled)}</TableCell>
+              <TableCell>{translateText('Edit', isI18nEnabled)}</TableCell>
+              <TableCell>{translateText('Remove', isI18nEnabled)}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -110,7 +113,7 @@ export function TxTable () {
                       {isEditting === id ? (
                         <TextField onChange={(event) => { setEditDescription(event.target.value) }} value={editDescription} />
                       ) : (
-                        <div>{ description }</div>
+                          <div>{translateText(description, isI18nEnabled) }</div>
                       )}
                     </TableCell>
                     <TableCell>{merchantId}</TableCell>
@@ -172,7 +175,7 @@ export function TxTable () {
         </Table>
       </TableContainer>
       <div css={convertStyle}>
-        { convertLabelText }
+        { translateText(convertLabelText, isI18nEnabled) }
         <Switch
           checked={isRoman}
           color='primary'
@@ -183,6 +186,10 @@ export function TxTable () {
       </div>
     </>
   )
+}
+
+TxTable.propTypes = {
+  isI18nEnabled: bool
 }
 
 const amountStyle = css`

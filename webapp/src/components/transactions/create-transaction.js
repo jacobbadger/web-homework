@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import TextField from '@material-ui/core/TextField'
+import { bool } from 'prop-types'
 import Button from '@material-ui/core/Button'
 import MenuItem from '@material-ui/core/MenuItem'
 import Select from '@material-ui/core/Select'
@@ -13,8 +14,9 @@ import { useMutation, useQuery } from '@apollo/react-hooks'
 import { createTransaction, getTransactions } from '../../gql/transactions.gql'
 import { getMerchants } from '../../gql/merchants.gql'
 import { getUsersQuery } from '../../gql/users.gql'
+import { translateText } from '../../utils/translation.util'
 
-export function CreateTransaction () {
+export function CreateTransaction ({ isI18nEnabled }) {
   const [amount, setAmount] = useState(0)
   const [selectedMerchant, setSelectedMerchant] = useState('')
   const [selectedUser, setSelectedUser] = useState('')
@@ -48,10 +50,10 @@ export function CreateTransaction () {
     <>
       <div css={containerStyle}>
         <div css={titleStyle} >
-          NEW TRANSACTION
+          { translateText('NEW TRANSACTION', isI18nEnabled) }
         </div>
         <div>
-          <InputLabel css={inputLabelStyle}>Amount</InputLabel>
+          <InputLabel css={inputLabelStyle}>{ translateText('Amount', isI18nEnabled) }</InputLabel>
           <TextField
             css={widthStyle}
             onChange={(event) => {
@@ -61,7 +63,7 @@ export function CreateTransaction () {
             value={amount}
             variant='filled'
           />
-          <InputLabel css={inputLabelStyle}>Merchant</InputLabel>
+          <InputLabel css={inputLabelStyle}>{ translateText('Merchant', isI18nEnabled) }</InputLabel>
           <Select
             css={widthStyle}
             id='merchant-select'
@@ -76,7 +78,7 @@ export function CreateTransaction () {
               <MenuItem key={id} value={id}>{name}</MenuItem>
             ))}
           </Select>
-          <InputLabel css={inputLabelStyle}>User</InputLabel>
+          <InputLabel css={inputLabelStyle}>{ translateText('User', isI18nEnabled) }</InputLabel>
           <Select
             css={widthStyle}
             id='user-select'
@@ -91,7 +93,7 @@ export function CreateTransaction () {
               <MenuItem key={id} value={id}>{firstName} {lastName}</MenuItem>
             ))}
           </Select>
-          <InputLabel css={inputLabelStyle}>Description</InputLabel>
+          <InputLabel css={inputLabelStyle}>{ translateText('Description', isI18nEnabled) }</InputLabel>
           <TextField
             css={widthStyle}
             id='description-field'
@@ -111,8 +113,8 @@ export function CreateTransaction () {
               }}
               value={creditDebitSelect}
             >
-              <FormControlLabel control={<Radio color='default' />} label='Credit' value='credit' />
-              <FormControlLabel control={<Radio color='default' />} label='Debit' value='debit' />
+              <FormControlLabel control={<Radio color='default' />} label={ translateText('Credit', isI18nEnabled) } value='credit' />
+              <FormControlLabel control={<Radio color='default' />} label={ translateText('Debit', isI18nEnabled) } value='debit' />
             </RadioGroup>
           </FormControl>
         </div>
@@ -137,12 +139,16 @@ export function CreateTransaction () {
             }}
             variant='outlined'
           >
-            ADD TRANSACTION
+            { translateText('ADD TRANSACTION', isI18nEnabled) }
           </Button>
         </div>
       </div>
     </>
   )
+}
+
+CreateTransaction.propTypes = {
+  isI18nEnabled: bool
 }
 
 const containerStyle = css`
