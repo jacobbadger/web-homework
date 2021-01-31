@@ -113,8 +113,8 @@ export function CreateTransaction ({ isI18nEnabled }) {
               }}
               value={creditDebitSelect}
             >
-              <FormControlLabel control={<Radio color='default' />} label={ translateText('Credit', isI18nEnabled) } value='credit' />
-              <FormControlLabel control={<Radio color='default' />} label={ translateText('Debit', isI18nEnabled) } value='debit' />
+              <FormControlLabel control={ <Radio color='default' /> } label={ translateText('Credit', isI18nEnabled) } value='credit' />
+              <FormControlLabel control={ <Radio color='default' /> } label={ translateText('Debit', isI18nEnabled) } value='debit' />
             </RadioGroup>
           </FormControl>
         </div>

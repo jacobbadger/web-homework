@@ -117,7 +117,7 @@ export function TxTable ({ isI18nEnabled }) {
                       )}
                     </TableCell>
                     <TableCell>{merchantId}</TableCell>
-                    <TableCell>{credit} {debit}</TableCell>
+                    <TableCell>{credit === true ? translateText('Credit', isI18nEnabled) : translateText('Debit', isI18nEnabled)}</TableCell>
                     <TableCell css={amountStyle}>
                       {isEditting === id ? (
                         <TextField onChange={(event) => { setEditAmount(event.target.value) }} value={editAmount} />

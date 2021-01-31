@@ -17,7 +17,7 @@ function AppRouter () {
                 <img alt='' css={logoStyle} src='https://getdivvy.com/wp-content/uploads/2019/05/Divvy-Logo-19-White.png' />
               </Link>
               <Typography variant='h6' >
-                <Link to='/another'>Another route</Link>
+                <Link css={linkStyle} to='/another'>Users</Link>
               </Typography>
             </Toolbar>
           </AppBar>
@@ -36,6 +36,12 @@ export default AppRouter
 const layoutStyle = css`
     display: grid;
     grid-row-gap: 24px;
+`
+
+const linkStyle = css`
+  color: white;
+  padding-left: 20px;
+  text-decoration: none;
 `
 
 const logoStyle = css`
