@@ -6,6 +6,15 @@ import { css } from '@emotion/core'
 export function Home () {
   return (
     <Fragment>
+      <h1 css={paddingStyle}>
+        Transactions
+      </h1>
+      <h4 css={paddingStyle}>
+        View all transactions that we have currently logged.
+        You can add a new transaction by filling out the form on the left,
+        as well as edit and delete already existing translations.
+        You can also convert all existing amount values to roman numerals if desired!
+      </h4>
       <div css={mainStyle}>
         <div css={paddingStyle}>
           <CreateTransaction />
@@ -23,5 +32,5 @@ const mainStyle = css`
 `
 
 const paddingStyle = css`
-  margin: 20px 10px 20px 10px;
+  margin: 20px 50px 20px 50px;
 `

@@ -116,9 +116,8 @@ export function CreateTransaction () {
             </RadioGroup>
           </FormControl>
         </div>
-        <div>
+        <div css={buttonStyle} >
           <Button
-            css={buttonStyle}
             disabled={!isButtonDisabled}
             onClick={() => {
               const transaction = {
@@ -147,15 +146,16 @@ export function CreateTransaction () {
 }
 
 const containerStyle = css`
-  background-color: lightgrey;
+  border: 3px solid black!important;
   border-radius: 15px;
+  box-shadow: 5px 5px 10px #888888;
   max-width: 300px;
   min-width: 300px;
   padding: 15px;
 `
 
 const creditDebitRadioStyle = css`
-  color: white;
+  color: black;
   display: inline-block;
   margin-bottom: 25px;
   margin-top: 10px;
@@ -166,15 +166,17 @@ const creditDebitRadioStyle = css`
 const buttonStyle = css`
   background-color: white;
   color: black;
+  padding-left: 5px;
 `
 
 const inputLabelStyle = css`
   margin-left: 5px;
   padding-top: 13px;
+  color: black;
 `
 const titleStyle = css`
-  color: grey;
-  padding: 15px 10px 15px 10px;
+  padding: 15px 10px 15px 5px;
+  font-weight: bold;
 `
 
 const widthStyle = css`

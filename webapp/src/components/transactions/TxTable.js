@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { deleteTransaction, getTransactions, updateTransaction } from '../../gql/transactions.gql'
 import { useMutation, useQuery } from '@apollo/react-hooks'
 import { css } from '@emotion/core'
+import { convertToRomanNumeral } from '../../utils/romanNumerals.util'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
 import TableCell from '@material-ui/core/TableCell'
@@ -14,6 +15,7 @@ import TextField from '@material-ui/core/TextField'
 import EditIcon from '@material-ui/icons/Edit'
 import SaveIcon from '@material-ui/icons/Save'
 import DeleteIcon from '@material-ui/icons/Delete'
+import Switch from '@material-ui/core/Switch'
 
 // const makeDataTestId = (transactionId, fieldName) => `transaction-${transactionId}-${fieldName}`
 
@@ -60,6 +62,9 @@ export function TxTable () {
   const [isEditting, setIsEditting] = useState(false)
   const [editDescription, setEditDescription] = useState('')
   const [editAmount, setEditAmount] = useState('')
+  const [isRoman, setIsRoman] = useState(false)
+
+  const convertLabelText = 'Convert to Roman Numeral'
 
   if (loading) {
     return (
@@ -78,98 +83,112 @@ export function TxTable () {
   }
 
   return (
-    <TableContainer component={Paper}>
-      <Table aria-label='a dense table' size='small' >
-        <TableHead>
-          <TableRow>
-            <TableCell>User ID</TableCell>
-            <TableCell>Description</TableCell>
-            <TableCell>Merchant ID</TableCell>
-            <TableCell>Debit/Credit</TableCell>
-            <TableCell>Amount</TableCell>
-            <TableCell>Edit</TableCell>
-            <TableCell>Remove</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data && data.transactions &&
-            data.transactions.map((row) => {
-              const { id, user_id: userId, description, merchant_id: merchantId, debit, credit, amount } = row
-              return (
-                <TableRow css={rowStyle} key={row.id}>
-                  <TableCell component='th' scope='row'>
-                    {userId}
-                  </TableCell>
-                  <TableCell css={descriptionStyle} >
-                    {isEditting === id ? (
-                      <TextField onChange={(event) => { setEditDescription(event.target.value) }} value={editDescription} />
-                    ) : (
-                      <>{ description }</>
-                    )}
-                  </TableCell>
-                  <TableCell>{merchantId}</TableCell>
-                  <TableCell>{credit} {debit}</TableCell>
-                  <TableCell css={amountStyle}>
-                    {isEditting === id ? (
-                      <TextField onChange={(event) => { setEditAmount(event.target.value) }} value={editAmount} />
-                    ) : (
-                      <>{ amount }</>
-                    )}
-                  </TableCell>
-                  <TableCell align='right' css={editIconStyle}>
-                    {isEditting !== id ? (
-                      <EditIcon
-                        css={buttonStyle}
+    <>
+      <TableContainer component={Paper} css={tableStyle} >
+        <Table aria-label='a dense table' size='small' >
+          <TableHead>
+            <TableRow>
+              <TableCell>User ID</TableCell>
+              <TableCell>Description</TableCell>
+              <TableCell>Merchant ID</TableCell>
+              <TableCell>Debit/Credit</TableCell>
+              <TableCell>Amount</TableCell>
+              <TableCell>Edit</TableCell>
+              <TableCell>Remove</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {data && data.transactions &&
+              data.transactions.map((row) => {
+                const { id, user_id: userId, description, merchant_id: merchantId, debit, credit, amount } = row
+                return (
+                  <TableRow css={rowStyle} key={row.id}>
+                    <TableCell component='th' scope='row'>
+                      {userId}
+                    </TableCell>
+                    <TableCell css={descriptionStyle} >
+                      {isEditting === id ? (
+                        <TextField onChange={(event) => { setEditDescription(event.target.value) }} value={editDescription} />
+                      ) : (
+                        <div>{ description }</div>
+                      )}
+                    </TableCell>
+                    <TableCell>{merchantId}</TableCell>
+                    <TableCell>{credit} {debit}</TableCell>
+                    <TableCell css={amountStyle}>
+                      {isEditting === id ? (
+                        <TextField onChange={(event) => { setEditAmount(event.target.value) }} value={editAmount} />
+                      ) : (
+                        <div>{ !isRoman ? amount : convertToRomanNumeral(amount)}</div>
+                      )}
+                    </TableCell>
+                    <TableCell align='right' css={editIconStyle}>
+                      {isEditting !== id ? (
+                        <EditIcon
+                          css={buttonStyle}
+                          onClick={() => {
+                            setIsEditting(id)
+                            setEditDescription(description)
+                            setEditAmount(amount)
+                          }}
+                        >
+                          Edit
+                        </EditIcon>
+                      ) : (
+                        <SaveIcon
+                          onClick={() => {
+                            const transaction = {
+                              amount: +editAmount,
+                              credit,
+                              debit,
+                              description: editDescription,
+                              id,
+                              merchantId: merchantId,
+                              userId: userId
+                            }
+                            updateTransactionMutation({ variables: transaction })
+                            setEditAmount('')
+                            setEditDescription('')
+                          }}
+                        >
+                          Save
+                        </SaveIcon>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      <DeleteIcon
+                        css={deleteStyle}
                         onClick={() => {
-                          setIsEditting(id)
-                          setEditDescription(description)
-                          setEditAmount(amount)
+                          removeTransactionMutation({ variables: { id } })
                         }}
                       >
-                        Edit
-                      </EditIcon>
-                    ) : (
-                      <SaveIcon
-                        onClick={() => {
-                          const transaction = {
-                            amount: +editAmount,
-                            credit,
-                            debit,
-                            description: editDescription,
-                            id,
-                            merchantId: merchantId,
-                            userId: userId
-                          }
-                          updateTransactionMutation({ variables: transaction })
-                          setEditAmount('')
-                          setEditDescription('')
-                        }}
-                      >
-                        Save
-                      </SaveIcon>
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    <DeleteIcon
-                      css={deleteStyle}
-                      onClick={() => {
-                        removeTransactionMutation({ variables: { id } })
-                      }}
-                    >
-                      Delete
-                    </DeleteIcon>
-                  </TableCell>
-                </TableRow>
-              )
-            })}
-        </TableBody>
-      </Table>
-    </TableContainer>
+                        Delete
+                      </DeleteIcon>
+                    </TableCell>
+                  </TableRow>
+                )
+              })}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <div css={convertStyle}>
+        { convertLabelText }
+        <Switch
+          checked={isRoman}
+          color='primary'
+          inputProps={{ 'aria-label': 'primary checkbox' }}
+          name='checkedB'
+          onChange={() => { setIsRoman(!isRoman) }}
+        />
+      </div>
+    </>
   )
 }
 
 const amountStyle = css`
   width: 80px;
+  max-width: 80px;
+  overflow: hidden;
 `
 
 const buttonStyle = css`
@@ -187,6 +206,18 @@ const descriptionStyle = css`
 
 const editIconStyle = css`
   max-width: 60px;
+`
+
+const convertStyle = css`
+  float: right;
+  max-width: 100%;
+  padding-top: 15px;
+`
+
+const tableStyle = css`
+  border: 3px solid black!important;
+  border-radius: 15px;
+  box-shadow: 5px 5px 10px #888888;
 `
 
 const rowStyle = css`
