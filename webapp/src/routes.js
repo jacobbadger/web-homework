@@ -2,6 +2,7 @@ import React from 'react'
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 import { css } from '@emotion/core'
 import { Home } from './home'
+import { UserView } from './components/users/user-view'
 import AppBar from '@material-ui/core/AppBar'
 import Typography from '@material-ui/core/Typography'
 import Toolbar from '@material-ui/core/Toolbar'
@@ -9,22 +10,22 @@ import Toolbar from '@material-ui/core/Toolbar'
 function AppRouter () {
   return (
     <Router>
-      <div css={layoutStyle}>
+      <div css={layoutStyle} style={{ backgroundImage: `url("https://getdivvy.com/wp-content/uploads/2019/07/divvy-home-background@1.5x-1.png")` }} >
         <nav css={navStyle}>
           <AppBar css={navStyle} position='static'>
             <Toolbar>
-              <Link to='/'>
+              <Link to='/?i18n=false'>
                 <img alt='' css={logoStyle} src='https://getdivvy.com/wp-content/uploads/2019/05/Divvy-Logo-19-White.png' />
               </Link>
               <Typography variant='h6' >
-                <Link to='/another'>Another route</Link>
+                <Link css={linkStyle} to='/users?i18n=false'>Users</Link>
               </Typography>
             </Toolbar>
           </AppBar>
         </nav>
         <div className='main-content' css={contentStyle}>
           <Route component={Home} exact path='/' />
-          <Route component={() => (<div>Content for /another route</div>)} exact path='/another' />
+          <Route component={UserView} exact path='/users' />
         </div>
       </div>
     </Router>
@@ -36,6 +37,12 @@ export default AppRouter
 const layoutStyle = css`
     display: grid;
     grid-row-gap: 24px;
+`
+
+const linkStyle = css`
+  color: white;
+  padding-left: 20px;
+  text-decoration: none;
 `
 
 const logoStyle = css`
@@ -58,5 +65,6 @@ const navStyle = css`
 `
 
 const contentStyle = css`
+  min-height: 950px;
   grid-row: 2;
 `
