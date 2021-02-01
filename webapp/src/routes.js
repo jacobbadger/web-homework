@@ -10,7 +10,7 @@ import Toolbar from '@material-ui/core/Toolbar'
 function AppRouter () {
   return (
     <Router>
-      <div css={layoutStyle}>
+      <div css={layoutStyle} style={{ backgroundImage: `url("https://getdivvy.com/wp-content/uploads/2019/07/divvy-home-background@1.5x-1.png")` }} >
         <nav css={navStyle}>
           <AppBar css={navStyle} position='static'>
             <Toolbar>
@@ -65,5 +65,6 @@ const navStyle = css`
 `
 
 const contentStyle = css`
+  min-height: 950px;
   grid-row: 2;
 `

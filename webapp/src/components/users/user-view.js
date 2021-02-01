@@ -14,27 +14,32 @@ export function UserView () {
 
   return (
     <Fragment>
-      <h1 css={paddingStyle}>
-        { translateText(pageTitle, isI18nEnabled) }
-      </h1>
-      <h4 css={paddingStyle} >
-        { translateText(pageDescription, isI18nEnabled) }
-      </h4>
-      <Link css={paddingStyle} onClick={() => { setIsI18nEnabled(!isI18nEnabled) }} to={`/users?i18n=${!isI18nEnabled}`} >
-        {translateText(translationText, isI18nEnabled)}
-      </Link>
-      <div css={mainStyle} >
-        <div css={paddingStyle} >
-          <CreateUser isI18nEnabled={isI18nEnabled} />
-        </div>
-        <div css={paddingStyle} >
-          <UserTable isI18nEnabled={isI18nEnabled} />
+      <div css={fullHeight} >
+        <h1 css={paddingStyle}>
+          {translateText(pageTitle, isI18nEnabled)}
+        </h1>
+        <h4 css={paddingStyle} >
+          {translateText(pageDescription, isI18nEnabled)}
+        </h4>
+        <Link css={paddingStyle} onClick={() => { setIsI18nEnabled(!isI18nEnabled) }} to={`/users?i18n=${!isI18nEnabled}`} >
+          {translateText(translationText, isI18nEnabled)}
+        </Link>
+        <div css={mainStyle} >
+          <div css={paddingStyle} >
+            <CreateUser isI18nEnabled={isI18nEnabled} />
+          </div>
+          <div css={paddingStyle} >
+            <UserTable isI18nEnabled={isI18nEnabled} />
+          </div>
         </div>
       </div>
-
     </Fragment>
   )
 }
+
+const fullHeight = css`
+  height: 100%;
+`
 
 const mainStyle = css`
   display: flex;

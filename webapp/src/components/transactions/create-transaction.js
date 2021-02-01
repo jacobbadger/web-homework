@@ -158,6 +158,7 @@ const containerStyle = css`
   max-width: 300px;
   min-width: 300px;
   padding: 15px;
+  background-color: white;
 `
 
 const creditDebitRadioStyle = css`
