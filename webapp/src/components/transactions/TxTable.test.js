@@ -19,6 +19,5 @@ describe('TxTable', () => {
     // ];
 
     // render(<MockedProvider mocks={mocks}><TxTable isI18nEnabled={false} /></MockedProvider>)
-    // expect(TxTable).toBeVisible()
   })
 })
